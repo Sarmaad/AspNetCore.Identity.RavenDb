@@ -122,5 +122,35 @@ namespace Maqduni.Extensions.DependencyInjection
 
             return serviceCollection;
         }
+
+        public static IServiceCollection AddRavenDbSession(
+            this IServiceCollection serviceCollection,
+            string connectionString = null)
+        {
+            if (!string.IsNullOrEmpty(connectionString))
+            {
+                if (serviceCollection.BuildServiceProvider().GetService<IDocumentStore>() != null)
+                {
+                    throw new TypeLoadException("Service type IDocumentStore is already registered. Either omit connectionString parameter or remove existing instance of the IDocumentStore service.");
+                }
+
+                serviceCollection.AddRavenDbDocumentStore(connectionString, store => store.Listeners.RegisterListener(new UniqueConstraintsStoreListener()));
+            }
+
+            var serviceProvider = serviceCollection.BuildServiceProvider();
+            var documentStore = serviceProvider.GetService<IDocumentStore>();
+            if (documentStore == null)
+            {
+                throw new TypeLoadException("Service type IDocumentStore is not registered.");
+            }
+
+            serviceCollection.Add(new ServiceDescriptor(typeof(IDocumentSession), p => {
+                var session = documentStore.OpenSession();
+                session.Advanced.UseOptimisticConcurrency = true;
+                return session;
+            }, ServiceLifetime.Scoped));
+
+            return serviceCollection;
+        }
     }
 }

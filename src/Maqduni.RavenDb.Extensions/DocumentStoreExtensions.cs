@@ -41,6 +41,17 @@ namespace Maqduni.RavenDb.Extensions
         /// <summary>
         /// Retrieves the document entity key prefix based on RavenDB store conventions.
         /// </summary>
+        /// <param name="session">The RavenDB asynchronous document session.</param>
+        /// <param name="entity">The entity.</param>
+        /// <returns></returns>
+        public static string GetDocumentKeyPrefix(this IDocumentSession session, object entity)
+        {
+            return GetDocumentKeyPrefix(session.Advanced.DocumentStore, entity);
+        }
+
+        /// <summary>
+        /// Retrieves the document entity key prefix based on RavenDB store conventions.
+        /// </summary>
         /// <param name="store">The RavenDB document store.</param>
         /// <returns></returns>
         public static string GetDocumentKeyPrefix<T>(this IDocumentStore store)
@@ -57,6 +68,17 @@ namespace Maqduni.RavenDb.Extensions
         {
             return GetDocumentKeyPrefix(session.Advanced.DocumentStore, typeof(T));
         }
+
+        /// <summary>
+        /// Retrieves the document entity key prefix based on RavenDB store conventions.
+        /// </summary>
+        /// <param name="session">The RavenDB asynchronous document session.</param>
+        /// <returns></returns>
+        public static string GetDocumentKeyPrefix<T>(this IDocumentSession session)
+        {
+            return GetDocumentKeyPrefix(session.Advanced.DocumentStore, typeof(T));
+        }
+
 
         /// <summary>
         /// Retrieves the document entity key prefix based on RavenDB store conventions.
@@ -80,6 +102,17 @@ namespace Maqduni.RavenDb.Extensions
         /// <param name="entityType">The entity type.</param>
         /// <returns></returns>
         public static string GetDocumentKeyPrefix(this IAsyncDocumentSession session, Type entityType)
+        {
+            return GetDocumentKeyPrefix(session.Advanced.DocumentStore, entityType);
+        }
+
+        /// <summary>
+        /// Retrieves the document entity key prefix based on RavenDB store conventions.
+        /// </summary>
+        /// <param name="session">The RavenDB asynchronous document session.</param>
+        /// <param name="entityType">The entity type.</param>
+        /// <returns></returns>
+        public static string GetDocumentKeyPrefix(this IDocumentSession session, Type entityType)
         {
             return GetDocumentKeyPrefix(session.Advanced.DocumentStore, entityType);
         }
