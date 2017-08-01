@@ -117,6 +117,11 @@ namespace Maqduni.RavenDb.Extensions
             return GetDocumentKeyPrefix(session.Advanced.DocumentStore, entityType);
         }
 
+        public static string GetFullDocumentKey<T>(this IDocumentSession session, object partialId)
+        {
+            return GetFullDocumentKey<T>(session.Advanced.DocumentStore, partialId);
+        }
+
         /// <summary>
         /// Appends the collection name and returns the full path to the document.
         /// </summary>
